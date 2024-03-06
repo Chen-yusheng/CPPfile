@@ -20,7 +20,7 @@
 
 // 全部变量
 int number;
-pthread_rwlock_t rwlock;  //飘红色波浪线，但程序运行没有问题
+pthread_rwlock_t rwlock;  
 
 
 void *read_num(void *arg)
