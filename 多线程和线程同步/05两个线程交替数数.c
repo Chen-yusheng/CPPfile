@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+//不做线程同步
+
+
+#define MAX 50
+
+int number; // 全部变量
+
+void *funcA_num(void *arg)
+{
+    for (int i = 0; i < MAX; i++)
+    {
+        int cur = number;
+        cur++;
+        usleep(10);
+        number = cur;
+        printf("Thread A, id = %lu, number = %d\n", pthread_self(), number);
+    }
+    return NULL;
+}
+
+void *funcB_num(void *arg)
+{
+    for (int i = 0; i < MAX; i++)
+    {
+        int cur = number;
+        cur++;
+        number = cur;
+        printf("Thread B, id = %lu, number = %d\n", pthread_self(), number);
+        usleep(10);
+    }
+    return NULL;
+}
+
+int main()
+{
+    pthread_t p1, p2;
+
+    // 创建两个线程
+    pthread_create(&p1, NULL, funcA_num, NULL);
+    pthread_create(&p2, NULL, funcB_num, NULL);
+
+    // 阻塞，回收资源
+    pthread_join(p1, NULL);
+    pthread_join(p2, NULL);
+}
